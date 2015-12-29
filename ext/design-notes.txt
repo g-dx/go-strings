@@ -1,0 +1,19 @@
+Cache Locality
+--------------
+
+The LCRS implementations store all nodes at the same level in a singly linked list. This is flexible and simple but
+allocations may be laid out all over memory and following these pointers when traversing the tree may lead to
+significant cache misses.
+
+Can we alleviate this by using a singly linked list of arrays? For example:
+
+type Node struct {
+    val string
+    child *Node
+    next *NodeList
+}
+
+type NodeList struct {
+    nodes [5]Node    // Not pointers - laid out contiguously
+    next *NodeList
+}
